@@ -64,8 +64,8 @@ SOCIAL_AUTH_PIPELINE = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.browniecoins.org', 'browniecoins.org', 'localhost', '127.0.0.1']
-CSRF_TRUSTED_ORIGINS = ['https://api.browniecoins.org', 'https://www.kafkacoineth.com', 'https://kafkacoineth.com']
+ALLOWED_HOSTS = ['www.gkenetic.com', 'gkenetic.com', 'localhost', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://www.gkenetic.com', 'https://www.kafkacoineth.com', 'https://kafkacoineth.com']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
