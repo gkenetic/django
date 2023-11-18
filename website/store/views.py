@@ -71,7 +71,90 @@ from io import BytesIO
 from eth_account import Account
 from eth_keyfile import create_keyfile_json
 
+import operator
+import numpy as np
+from deap import creator, base, tools, gp, algorithms
+from functools import partial
+
 register = template.Library()
+
+
+# Create the types for the individual and the fitness
+pset = gp.PrimitiveSet("MAIN", arity=1)
+pset.addPrimitive(operator.add, arity=2)
+pset.addPrimitive(operator.sub, arity=2)
+pset.addPrimitive(operator.mul, arity=2)
+pset.addPrimitive(np.sin, arity=1)
+pset.addPrimitive(np.cos, arity=1)
+pset.addPrimitive(np.exp, arity=1)
+pset.addPrimitive(np.log, arity=1)
+pset.addPrimitive(np.sqrt, arity=1)
+pset.addPrimitive(protectedDiv, arity=2)  # Use protectedDiv here
+
+pset.addEphemeralConstant("rand", partial(np.random.uniform, -1, 1))
+
+creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
+
+toolbox = base.Toolbox()
+toolbox.register("expr", gp.genHalfAndHalf, pset=pset, min_=1, max_=2)
+toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.expr)
+toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+
+toolbox.register("compile", gp.compile, pset=pset)
+toolbox.register("evaluate", evaluate, x=None, target_values=np.sin(np.linspace(-1, 1, 100)))
+
+toolbox.register("select", tools.selTournament, tournsize=3)
+toolbox.register("mate", gp.cxOnePoint)
+toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
+toolbox.register("mutate", gp.mutUniform, expr=toolbox.expr_mut, pset=pset)
+
+
+# Define the problem
+def evaluate(individual, x, target_values):
+    func = gp.compile(expr=individual, pset=pset)
+
+    # Assuming data is read from a file named 'input_data.txt'
+    # Replace 'your_url_here' with the actual URL containing your data
+    url = 'https://www.gkenetic.com/static/data/sample.txt'
+
+    # Fetch data from the URL
+    response = requests.get(url)
+
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        # Convert the response content to a list of floats
+        data = [float(line.strip()) for line in response.text.split('\n')]
+    else:
+        # If the request was not successful, print an error message
+        print(f"Failed to fetch data from {url}. Status code: {response.status_code}")
+
+
+    # Your problem-specific evaluation function
+    predicted_values = [func(x_i) for x_i in data]
+
+    # Ensure the length of predicted_values matches the length of target_values
+    if len(predicted_values) != len(target_values):
+        raise ValueError("Length of predicted_values does not match the length of target_values.")
+
+    # Handle invalid values (e.g., NaN, Inf)
+    predicted_values = [0.0 if np.isnan(value) or np.isinf(value) or np.isneginf(value) else value for value in predicted_values]
+
+    # Assuming the length of target_values and predicted_values are the same
+    fitness = np.sum(np.abs(np.subtract(target_values, predicted_values)))
+
+    # Penalize individuals producing invalid values
+    if any(np.isnan(value) or np.isinf(value) or np.isneginf(value) for value in predicted_values):
+        fitness += 1e6  # Add a large penalty
+
+    return fitness,
+
+# Define protectedDiv as a primitive
+def protectedDiv(left, right):
+    try:
+        return left / right
+    except ZeroDivisionError:
+        return 1.0  # Return a default value to avoid division by zero
 
 def verify_signed_message(message, signature, public_address):
     # Skip signature verification if signature, account address, or message is empty
@@ -98,7 +181,46 @@ def generate_id():
     return uuid.uuid4().hex
 
 
+def gkenetic(request):
+    random.seed(42)
 
+    # Assuming the length of target_values and predicted_values are the same
+    target_values = np.sin(np.linspace(19, 25, 10))  # Adjust the length as needed
+
+    # Pass target_values to the evaluate function
+    toolbox.register("evaluate", evaluate, x=None, target_values=target_values)
+
+    population = toolbox.population(n=300)
+    generations = 50
+
+    for gen in range(generations):
+        offspring = algorithms.varAnd(population, toolbox, cxpb=0.7, mutpb=0.1)
+        fits = toolbox.map(toolbox.evaluate, offspring)
+
+        for fit, ind in zip(fits, offspring):
+            ind.fitness.values = fit
+
+            # Print the individual if you want to inspect it
+            print(f"Generation {gen}, Individual: {ind}, Fitness: {fit}")
+
+        population = toolbox.select(offspring + population, k=len(population))
+
+    best_individual = tools.selBest(population, k=1)[0]
+    best_function = gp.compile(expr=best_individual, pset=pset)
+
+    print(f"Best individual fitness: {best_individual.fitness.values[0]}")
+    print(f"Best individual: {best_individual}")
+    print("Best function:")
+    print(best_function)
+
+    new_data = np.linspace(19, 30, 20)  # Adjust the length as needed
+
+    # Apply the compiled function to the new data
+    predictions = [best_function(x_i) for x_i in new_data]
+
+    # Print or use the predictions as needed
+    print("Predictions for new data:")
+    print(predictions)
 
 def index(request):
     cart_id = request.COOKIES.get('cartId')
