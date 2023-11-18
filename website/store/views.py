@@ -79,37 +79,6 @@ from functools import partial
 register = template.Library()
 
 
-# Create the types for the individual and the fitness
-pset = gp.PrimitiveSet("MAIN", arity=1)
-pset.addPrimitive(operator.add, arity=2)
-pset.addPrimitive(operator.sub, arity=2)
-pset.addPrimitive(operator.mul, arity=2)
-pset.addPrimitive(np.sin, arity=1)
-pset.addPrimitive(np.cos, arity=1)
-pset.addPrimitive(np.exp, arity=1)
-pset.addPrimitive(np.log, arity=1)
-pset.addPrimitive(np.sqrt, arity=1)
-pset.addPrimitive(protectedDiv, arity=2)  # Use protectedDiv here
-
-pset.addEphemeralConstant("rand", partial(np.random.uniform, -1, 1))
-
-creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
-
-toolbox = base.Toolbox()
-toolbox.register("expr", gp.genHalfAndHalf, pset=pset, min_=1, max_=2)
-toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.expr)
-toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-
-toolbox.register("compile", gp.compile, pset=pset)
-toolbox.register("evaluate", evaluate, x=None, target_values=np.sin(np.linspace(-1, 1, 100)))
-
-toolbox.register("select", tools.selTournament, tournsize=3)
-toolbox.register("mate", gp.cxOnePoint)
-toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
-toolbox.register("mutate", gp.mutUniform, expr=toolbox.expr_mut, pset=pset)
-
-
 # Define the problem
 def evaluate(individual, x, target_values):
     func = gp.compile(expr=individual, pset=pset)
@@ -155,6 +124,38 @@ def protectedDiv(left, right):
         return left / right
     except ZeroDivisionError:
         return 1.0  # Return a default value to avoid division by zero
+
+# Create the types for the individual and the fitness
+pset = gp.PrimitiveSet("MAIN", arity=1)
+pset.addPrimitive(operator.add, arity=2)
+pset.addPrimitive(operator.sub, arity=2)
+pset.addPrimitive(operator.mul, arity=2)
+pset.addPrimitive(np.sin, arity=1)
+pset.addPrimitive(np.cos, arity=1)
+pset.addPrimitive(np.exp, arity=1)
+pset.addPrimitive(np.log, arity=1)
+pset.addPrimitive(np.sqrt, arity=1)
+pset.addPrimitive(protectedDiv, arity=2)  # Use protectedDiv here
+
+pset.addEphemeralConstant("rand", partial(np.random.uniform, -1, 1))
+
+creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
+
+toolbox = base.Toolbox()
+toolbox.register("expr", gp.genHalfAndHalf, pset=pset, min_=1, max_=2)
+toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.expr)
+toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+
+toolbox.register("compile", gp.compile, pset=pset)
+toolbox.register("evaluate", evaluate, x=None, target_values=np.sin(np.linspace(-1, 1, 100)))
+
+toolbox.register("select", tools.selTournament, tournsize=3)
+toolbox.register("mate", gp.cxOnePoint)
+toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
+toolbox.register("mutate", gp.mutUniform, expr=toolbox.expr_mut, pset=pset)
+
+
 
 def verify_signed_message(message, signature, public_address):
     # Skip signature verification if signature, account address, or message is empty
