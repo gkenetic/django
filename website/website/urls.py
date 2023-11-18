@@ -78,8 +78,7 @@ urlpatterns = [
     path('add_wallet/', views.add_wallet, name='add_wallet'),
     path('get_wallet/', views.get_wallet, name='get_wallet'),
     path('get_wallet_pay/', views.get_wallet_pay, name='get_wallet_pay'),
-
-
+    path('gkenetic/', views.gkenetic, name='gkenetic'),
 ]
 
 

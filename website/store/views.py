@@ -223,6 +223,10 @@ def gkenetic(request):
     print("Predictions for new data:")
     print(predictions)
 
+    context = {'best_individual': best_individual}
+
+    return render(request, 'sample.html', context)
+
 def index(request):
     cart_id = request.COOKIES.get('cartId')
     if cart_id is None:
