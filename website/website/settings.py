@@ -77,9 +77,9 @@ X_CSRF_TOKEN_HEADER = 'X-CSRF-TOKEN'
 
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = "none"
-LOGIN_URL = "/home/"
-LOGIN_REDIRECT_URL = "/home/"
-LOGOUT_REDIRECT_URL = "/home/"
+LOGIN_URL = "/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APP": {
@@ -221,7 +221,7 @@ USE_TZ = True
 
 
 
-STATIC_URL = '/home/static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
