@@ -75,6 +75,8 @@ import operator
 import numpy as np
 from deap import creator, base, tools, gp, algorithms
 from functools import partial
+import subprocess
+
 
 register = template.Library()
 
@@ -182,6 +184,18 @@ def get_csrf_token(request):
 def generate_id():
     return uuid.uuid4().hex
 
+def gkenetic_sp(request):
+    script_path = '/root/gp/gp.py'
+
+    try:
+        # Call the Python script using subprocess
+        result = subprocess.run(['python3', script_path], capture_output=True, text=True)
+        output = result.stdout
+        error = result.stderr
+        return render(request, 'sample.html', {'best_individual': output, 'error': error})
+    except Exception as e:
+        # Handle exceptions if the script fails to run
+        return render(request, 'sample.html', {'error': str(e)})
 
 def gkenetic(request):
     random.seed(42)
