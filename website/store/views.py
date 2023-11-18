@@ -93,7 +93,8 @@ def evaluate(individual, x, target_values):
     # Check if the request was successful (status code 200)
     if response.status_code == 200:
         # Convert the response content to a list of floats
-        data = [float(line.strip()) for line in response.text.split('\n')]
+        data = [float(line.strip()) for line in response.text.split('\n') if line.strip()]
+
     else:
         # If the request was not successful, print an error message
         print(f"Failed to fetch data from {url}. Status code: {response.status_code}")
