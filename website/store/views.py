@@ -105,7 +105,7 @@ def generate_id():
     return uuid.uuid4().hex
 
 def gkenetic(request):
-    script_path = '/root/gp/gp.py'
+    script_path = '/root/gprg/tp.py'
 
     try:
         # Call the Python script using subprocess
