@@ -107,6 +107,10 @@ def generate_id():
 def gkenetic(request):
     script_path = '/root/gprg/tp.py'
 
+    model = request.GET.get('model', '')
+    if model == "btc_h" :
+        script_path = '/root/gprg/tp_h.py'
+
     try:
         # Call the Python script using subprocess
         result = subprocess.run(['python3', script_path], capture_output=True, text=True)
