@@ -110,7 +110,7 @@ def gkenetic(request):
     try:
         # Call the Python script using subprocess
         result = subprocess.run(['python3', script_path], capture_output=True, text=True)
-        output = result.stdout.split("Best individual fitness: ")[1].strip()
+        output = result.stdout.split("Best individual: ")[1].strip()
         error = result.stderr
 
         return render(request, 'sample.html', {'best_individual': output, 'error': error})
