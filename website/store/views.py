@@ -112,6 +112,8 @@ def gkenetic(request):
         script_path = '/root/gprg/tp_h.py'
     if model == 'tsla_h' :
         script_path = '/root/gprg/tslatp_h.py'
+    if model == 'btc_h' :
+        script_path = '/root/gprg/tp_15.py'
 
     print(script_path)
     try:
