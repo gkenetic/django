@@ -50,7 +50,7 @@ function createSupplyLineChart(data) {
         labels: timestamps,
         datasets: [
             {
-                label: 'Current Coin Supply',
+                label: 'Bitcoin Price',
                 borderColor: 'blue',
                 data: coin_supply,
                 fill: false,
@@ -73,7 +73,7 @@ function createSupplyLineChart(data) {
                 y: {
                     title: {
                         display: true,
-                        text: 'Coin Supply',
+                        text: 'Bitcoin Price',
                     },
                 },
             },
