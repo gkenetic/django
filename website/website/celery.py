@@ -14,21 +14,9 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 
 app.conf.beat_schedule = {
-    'my-periodic-task': {
-        'task': 'store.tasks.my_periodic_task',
-        'schedule': crontab(minute=58, hour='1'),  # Run once an hour at the start of the hour
-    },
-    'my-periodic-task-balance': {
-        'task': 'store.tasks.my_periodic_task_balance',
-        'schedule': crontab(minute=15, hour='2'),  # Run once an hour at the start of the hour
-    },
-    'my-periodic-coin-stats-task': {
-        'task': 'store.tasks.my_periodic_coin_stats_task',
-        'schedule': crontab(minute='*/5'),
-    },
     'process-magic-key': {
-        'task': 'store.tasks.process_magic_key',
-        'schedule': timedelta(seconds=30),
+        'task': 'store.tasks.my_periodic_bitcoin_price',
+        'schedule': timedelta(seconds=60),
     },
 }
 
