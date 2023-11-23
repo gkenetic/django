@@ -105,7 +105,7 @@ def generate_id():
     return uuid.uuid4().hex
 
 def gkenetic_btc_price(request):
-    coin_stats_data = BitcoinPrice.objects.order_by('-timestamp')[:50]
+    coin_stats_data = BitcoinPrice.objects.filter(bitcoin_price=1.0).order_by('-timestamp')[:50]
 
     # Serialize the data to JSON
     data = serializers.serialize('json', coin_stats_data)
