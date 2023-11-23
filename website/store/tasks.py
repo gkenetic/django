@@ -39,6 +39,11 @@ def my_periodic_bitcoin_price():
             last_float_value = float(last_element.split()[-1])
 
             bitcoin_price_cc = last_float_value
+            bitcoinprice = BitcoinPrice(
+                bitcoin_price=bitcoin_price_cc,
+            )
+            bitcoinprice.save()
+
         else:
             print("No matches found between square brackets.")
     else:
@@ -49,9 +54,3 @@ def my_periodic_bitcoin_price():
         print(f"The last price is: {last_price}")
     else:
         print("Unable to retrieve the last price.")
-
-
-    bitcoinprice = BitcoinPrice(
-        bitcoin_price=bitcoin_price_cc,
-    )
-    bitcoinprice.save()
