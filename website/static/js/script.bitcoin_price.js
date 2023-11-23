@@ -44,7 +44,7 @@ function createSupplyLineChart(data) {
     const coin_supply = data.map(entry => entry.fields.bitcoin_price);
 
     // Create the line chart
-    const ctx = document.getElementById('bitcoin_price_chart').getContext('2d');
+    const ctx = document.getElementById('bitcoinpricechart').getContext('2d');
 
     const chartData = {
         labels: timestamps,
