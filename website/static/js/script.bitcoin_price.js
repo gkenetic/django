@@ -50,7 +50,7 @@ function createSupplyLineChart(data) {
         labels: timestamps,
         datasets: [
             {
-                label: 'Bitcoin Price',
+                label: 'Predicted Bitcoin Price',
                 borderColor: 'blue',
                 data: coin_supply,
                 fill: false,
