@@ -2,7 +2,7 @@
 const url_coin_supply = 'https://www.gkenetic.com/gkenetic_btc_price_day/';
 
 // Function to fetch JSON data from the URL
-async function fetchSupplyData() {
+async function fetchSupplyDataDay() {
     try {
         await new Promise(resolve => setTimeout(resolve, 1500));
 
@@ -32,7 +32,7 @@ async function fetchSupplyData() {
     }
 }
 
-function createSupplyLineChart(data) {
+function createSupplyLineChartDay(data) {
     // Check if data is an array before using map
     if (!Array.isArray(data)) {
         console.error('Data is not an array:', data);
@@ -84,6 +84,6 @@ function createSupplyLineChart(data) {
 }
 
 // Fetch data and create the chart
-fetchSupplyData().then(data => {
-    createSupplyLineChart(data);
+fetchSupplyDataDay().then(data => {
+    createSupplyLineChartDay(data);
 });
