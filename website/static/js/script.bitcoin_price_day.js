@@ -1,12 +1,12 @@
 // Define the URL to fetch JSON data
-const url_coin_supply = 'https://www.gkenetic.com/gkenetic_btc_price_day/';
+const url_coin_supply_day = 'https://www.gkenetic.com/gkenetic_btc_price_day/';
 
 // Function to fetch JSON data from the URL
 async function fetchSupplyDataDay() {
     try {
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        const response = await fetch(url_coin_supply);
+        const response = await fetch(url_coin_supply_day);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
