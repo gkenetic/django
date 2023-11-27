@@ -80,6 +80,8 @@ urlpatterns = [
     path('get_wallet_pay/', views.get_wallet_pay, name='get_wallet_pay'),
     path('gkenetic/', views.gkenetic, name='gkenetic'),
     path('gkenetic_btc_price/', views.gkenetic_btc_price, name='gkenetic_btc_price'),
+    path('gkenetic_btc_price_day/', views.gkenetic_btc_price_day, name='gkenetic_btc_price_day'),
+
 ]
 
 

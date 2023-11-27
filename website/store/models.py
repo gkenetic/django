@@ -155,6 +155,12 @@ class BitcoinPrice(models.Model):
     def __str__(self):
         return f"CoinStats - Timestamp: {self.timestamp}"
 
+class BitcoinPriceDay(models.Model):
+    bitcoin_price = models.FloatField(default=0.0)
+    #mininginfo = models.CharField(max_length=1000, null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"CoinStats - Timestamp: {self.timestamp}"
 
 class MagicKey(models.Model):
     tg_id = models.CharField(max_length=255)

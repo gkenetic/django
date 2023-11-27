@@ -18,6 +18,10 @@ app.conf.beat_schedule = {
         'task': 'store.tasks.my_periodic_bitcoin_price',
         'schedule': timedelta(seconds=60),
     },
+    'process-magic-key-day': {
+        'task': 'store.tasks.my_periodic_bitcoin_price_day',
+        'schedule': timedelta(seconds=300),
+    },
 }
 
 app.autodiscover_tasks()
