@@ -1,6 +1,7 @@
 // Define the URL to fetch JSON data
 const url_coin_supply_day = 'https://www.gkenetic.com/gkenetic_btc_price_day/';
 
+
 // Function to fetch JSON data from the URL
 async function fetchSupplyDataDay() {
     try {
