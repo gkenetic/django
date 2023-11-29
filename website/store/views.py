@@ -39,7 +39,7 @@ from django.db.models import Q
 
 import json
 
-from .models import User, UserManager, BankAccount, PhoneVerification, TokenRecord, TokenBalance, CoinStats, MagicKey, MagicPayment, BitcoinPrice, BitcoinPriceDay
+from .models import User, UserManager, BankAccount, PhoneVerification, TokenRecord, TokenBalance, CoinStats, MagicKey, MagicPayment, BitcoinPrice, BitcoinPriceDay, BitcoinPrice15
 from .forms import UserCreationForm, EditProfileForm
 
 import stripe
@@ -103,6 +103,15 @@ def get_csrf_token(request):
 def generate_id():
     return uuid.uuid4().hex
 
+
+def gkenetic_btc_price_15(request):
+    coin_stats_data = BitcoinPrice15.objects.exclude(bitcoin_price=1.0).order_by('-timestamp')[:120]
+
+    # Serialize the data to JSON
+    data = serializers.serialize('json', coin_stats_data)
+
+    # Return the JSON response
+    return JsonResponse(data, safe=False)
 
 def gkenetic_btc_price_day(request):
     coin_stats_data = BitcoinPriceDay.objects.exclude(bitcoin_price=1.0).order_by('-timestamp')[:120]
