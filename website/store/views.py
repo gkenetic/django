@@ -105,7 +105,7 @@ def generate_id():
 
 
 def gkenetic_btc_price_day(request):
-    coin_stats_data = BitcoinPriceDay.objects.exclude(bitcoin_price=1.0).order_by('-timestamp')[:60]
+    coin_stats_data = BitcoinPriceDay.objects.exclude(bitcoin_price=1.0).order_by('-timestamp')[:120]
 
     # Serialize the data to JSON
     data = serializers.serialize('json', coin_stats_data)
@@ -114,7 +114,7 @@ def gkenetic_btc_price_day(request):
     return JsonResponse(data, safe=False)
 
 def gkenetic_btc_price(request):
-    coin_stats_data = BitcoinPrice.objects.exclude(bitcoin_price=1.0).order_by('-timestamp')[:60]
+    coin_stats_data = BitcoinPrice.objects.exclude(bitcoin_price=1.0).order_by('-timestamp')[:120]
 
     # Serialize the data to JSON
     data = serializers.serialize('json', coin_stats_data)
